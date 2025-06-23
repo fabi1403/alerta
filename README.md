@@ -1,14 +1,3 @@
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Alertas de Emergencias para Comunidades
+Un espacio donde los miembros de la comunidad pueden publicar y visualizar alertas sobre emergencias, incidentes o sucesos importantes que afecten a su localidad. Mantente informado y contribuye a la seguridad de todos.
+@FBN 2025
