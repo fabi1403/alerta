@@ -143,7 +143,7 @@ export const NAV_LINKS: NavLinkItem[] = [
 export const CRITICAL_ALERT_DATA: AlertItem = {
   id: 'critical-1',
   type: AlertType.Critical,
-  title: 'Alertas de Emergencias para Comunidades',
+  title: 'SafeAlert 🛑',
   description: 'Un espacio donde los miembros de la comunidad pueden publicar y visualizar alertas sobre emergencias, incidentes o sucesos importantes que afecten a su localidad. Mantente informado y contribuye a la seguridad de todos.',
   image_url: '/paisaje-fondo-alertas.jpg', // Usar la imagen local
 };

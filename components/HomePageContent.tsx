@@ -196,7 +196,7 @@ const HomePageContent: React.FC = () => {
               aria-labelledby="critical-alert-title"
             >
               <div className="flex p-4">
-                <p id="critical-alert-title" className="text-white tracking-light text-[28px] font-bold leading-tight">Alertas de Emergencias para Comunidades</p>
+                <p id="critical-alert-title" className="text-white tracking-light text-[28px] font-bold leading-tight">SafeAlert 🛑</p>
               </div>
             </div>
           </div>

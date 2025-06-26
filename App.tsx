@@ -136,7 +136,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-300 dark:border-slate-700 px-4 sm:px-10 py-3 bg-white dark:bg-slate-800 shadow-sm transition-colors duration-300">
       <Link to="/" className="flex items-center gap-2 sm:gap-4 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-md">
         <AppLogoIcon className="size-7 sm:size-8 text-teal-600 dark:text-teal-400" />
-        <h2 className="text-slate-800 dark:text-slate-200 text-md sm:text-lg font-bold leading-tight tracking-[-0.015em]">Alertas Comunitarias</h2>
+        <h2 className="text-slate-800 dark:text-slate-200 text-md sm:text-lg font-bold leading-tight tracking-[-0.015em]">SafeAlert 🛑</h2>
       </Link>
       <div className="flex flex-1 justify-end items-center gap-2 sm:gap-3">
         <nav className="hidden sm:flex items-center gap-5">
@@ -229,12 +229,12 @@ const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {
 // Pages
 const AboutPage: React.FC = () => (
   <div className="max-w-4xl mx-auto p-6 sm:p-10 text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 shadow-lg rounded-lg my-8 border border-slate-300 dark:border-slate-700 transition-colors duration-300">
-    <h1 className="text-3xl sm:text-4xl font-bold text-teal-600 dark:text-teal-400 mb-6">Sobre Alertas Comunitarias</h1>
+    <h1 className="text-3xl sm:text-4xl font-bold text-teal-600 dark:text-teal-400 mb-6">Sobre SafeAlert</h1>
     <div className="space-y-6 text-base sm:text-lg leading-relaxed">
       <section>
         <h2 className="text-2xl font-semibold text-slate-700 dark:text-slate-300 mb-2">Nuestra Misión</h2>
         <p>
-          En Alertas Comunitarias, nuestra misión es empoderar a los residentes con información precisa, oportuna y accionable durante eventos críticos. Creemos que una comunidad informada es una comunidad resiliente, capaz de navegar los desafíos con mayor seguridad y preparación.
+          En SafeAlert, nuestra misión es empoderar a los residentes con información precisa, oportuna y accionable durante eventos críticos. Creemos que una comunidad informada es una comunidad resiliente, capaz de navegar los desafíos con mayor seguridad y preparación.
         </p>
       </section>
       <section>
@@ -264,13 +264,13 @@ const ContactPage: React.FC = () => (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-2">Consultas Generales y Soporte</h2>
-            <p><strong>Correo Electrónico:</strong> <a href="mailto:soporte@alertascomunitarias.ejemplo.com" className="text-teal-600 dark:text-teal-400 hover:underline">soporte@alertascomunitarias.ejemplo.com</a></p>
-            <p><strong>Teléfono:</strong> <a href="tel:+15550102537" className="text-teal-600 dark:text-teal-400 hover:underline">(555) 010-ALERTA (2537)</a></p>
+            <p><strong>Correo Electrónico:</strong> <a href="mailto:soporte@safealert.ejemplo.com" className="text-teal-600 dark:text-teal-400 hover:underline">soporte@safealert.ejemplo.com</a></p>
+            <p><strong>Teléfono:</strong> <a href="tel:+15550102537" className="text-teal-600 dark:text-teal-400 hover:underline">(555) 010-SAFE (7233)</a></p>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">(Lun-Vie, 9 AM - 5 PM Hora Local)</p>
           </div>
           <div>
             <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-2">Dirección Postal</h2>
-            <p>Sede de Alertas Comunitarias</p>
+            <p>Sede de SafeAlert</p>
             <p>Avenida Alerta 123, Oficina 100</p>
             <p>Ciudad Comunidad, ST 54321</p>
             <p>Estados Unidos</p>
@@ -307,7 +307,7 @@ const MainAppStructure: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-sky-100 dark:bg-slate-900 transition-colors duration-300">
         <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-teal-600 dark:border-teal-400"></div>
-        <p className="text-xl text-slate-700 dark:text-slate-300 mt-4">Iniciando Alertas Comunitarias...</p>
+        <p className="text-xl text-slate-700 dark:text-slate-300 mt-4">Iniciando SafeAlert...</p>
       </div>
     );
   }

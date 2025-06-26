@@ -82,7 +82,7 @@ const AddAlertForm: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 sm:p-10 bg-white dark:bg-slate-800 shadow-lg rounded-lg my-8 border border-slate-300 dark:border-slate-700 transition-colors duration-300">
-      <h1 className="text-3xl font-bold text-teal-600 dark:text-teal-400 mb-6">Agregar Nueva Alerta Comunitaria</h1>
+      <h1 className="text-3xl font-bold text-teal-600 dark:text-teal-400 mb-6">Agregar Nueva Alerta SafeAlert 🛑</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-slate-700 dark:text-slate-300">

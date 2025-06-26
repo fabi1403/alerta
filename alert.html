@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlertaAhora</title>
+    <title>SafeAlert</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Baloo 2 Font -->
@@ -214,7 +214,7 @@
 
     <header class="bg-gradient-to-r from-sky-500 to-blue-600 text-white p-4 shadow-lg flex items-center justify-between flex-wrap">
         <div class="flex items-center">
-            <h1 class="text-2xl font-bold gradient-text mr-6">AlertaAhora 🚨</h1>
+            <h1 class="text-2xl font-bold gradient-text mr-6">SafeAlert 🚨</h1>
         </div>
         <nav class="flex items-center gap-4 flex-grow justify-end overflow-x-auto">
             <a href="#recentAlertsSection" class="header-nav-link text-white font-medium text-lg flex-shrink-0">Alertas Recientes ✨</a>
@@ -273,7 +273,7 @@
             <aside class="w-full md:w-1/3 p-6 md:p-8 border-b md:border-r border-gray-200 flex flex-col justify-between">
                 <div>
                     <h1 class="text-3xl font-extrabold mb-6 flex items-center gradient-text">
-                        <i class="fas fa-bullhorn text-4xl mr-3"></i> AlertaAhora 📣
+                        <i class="fas fa-bullhorn text-4xl mr-3"></i> SafeAlert 📣
                     </h1>
                     <p class="text-gray-600 text-sm mb-6">Emite una alerta rápida para tu comunidad. Tu ID de usuario: <span id="displayUserId" class="font-bold text-gray-800 break-words"></span></p>
 
@@ -364,7 +364,7 @@
 
         // Firebase Configuration (provided globally by the Canvas environment)
         // This setup is crucial for data persistence and user authentication.
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-alerta-ahora-app';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-safealert-app';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null; 
 
