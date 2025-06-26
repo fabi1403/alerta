@@ -1,0 +1,6 @@
+{
+  "name": "Community Alerts",
+  "description": "A web application to display community emergency alerts, featuring user registration and login, and a tabbed interface for current and historical alerts.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}
