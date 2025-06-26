@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../App';
 import { AlertType } from '../types';
+import { MapPinIcon, CalendarIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 const AddAlertForm: React.FC = () => {
   const { user } = useAuth();
@@ -11,12 +12,52 @@ const AddAlertForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
-  const [alertType, setAlertType] = useState<AlertType | string>(AlertType.Current);
+  const [alertType, setAlertType] = useState<AlertType | string>(AlertType.Other);
   const [alertTimeStr, setAlertTimeStr] = useState('');
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  // Request location permission on component mount
+  React.useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // Permission granted, no need to do anything specific here yet, just pre-emptively ask
+          console.log("Geolocation permission granted.", position);
+        },
+        (error) => {
+          console.warn("Geolocation permission denied or error:", error);
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    }
+  }, []);
+
+  const handleGetLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLatitude(latitude);
+          setLongitude(longitude);
+          setLocation(`Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`);
+          setError(null);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setError("No se pudo obtener la ubicación. Por favor, ingrésala manualmente.");
+          setLatitude(null);
+          setLongitude(null);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    } else {
+      setError("La geolocalización no es soportada por tu navegador.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,11 +69,17 @@ const AddAlertForm: React.FC = () => {
     setError(null);
     setSuccessMessage(null);
 
-    let iconName = null;
-    if (alertType === AlertType.Current || alertType === 'Current') {
-        iconName = 'WarningCircleIcon'; 
-    } else if (alertType === AlertType.History || alertType === 'History') {
-        iconName = 'CarIcon'; 
+    let iconName: string | null = null;
+    switch (alertType) {
+      case AlertType.Fire: iconName = 'FireIcon'; break;
+      case AlertType.Flood: iconName = 'CloudRainIcon'; break;
+      case AlertType.Medical: iconName = 'HeartIcon'; break;
+      case AlertType.Crime: iconName = 'ExclamationTriangleIcon'; break;
+      case AlertType.Traffic: iconName = 'CarIcon'; break;
+      case AlertType.Weather: iconName = 'CloudIcon'; break;
+      case AlertType.Current: iconName = 'WarningCircleIcon'; break;
+      case AlertType.History: iconName = 'ArchiveBoxIcon'; break;
+      default: iconName = 'InformationCircleIcon'; break;
     }
 
     const { error: insertError } = await supabase
@@ -45,6 +92,8 @@ const AddAlertForm: React.FC = () => {
         type: alertType, 
         alert_time_str: alertTimeStr,
         icon_name: iconName,
+        latitude,
+        longitude,
       });
 
     setLoading(false);
@@ -57,8 +106,10 @@ const AddAlertForm: React.FC = () => {
       setTitle('');
       setDescription('');
       setLocation('');
-      setAlertType(AlertType.Current);
+      setAlertType(AlertType.Other);
       setAlertTimeStr('');
+      setLatitude(null);
+      setLongitude(null);
       setTimeout(() => {
         setSuccessMessage(null); 
         navigate('/');
@@ -115,27 +166,47 @@ const AddAlertForm: React.FC = () => {
           <label htmlFor="location" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Ubicación
           </label>
-          <input
-            id="location"
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-700 transition-colors duration-150"
-            placeholder="Ej: Barrio Norte, Av. Central #123"
-          />
+          <div className="flex items-center mt-1">
+            <input
+              id="location"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-700 transition-colors duration-150"
+              placeholder="Ej: Barrio Norte, Av. Central #123"
+            />
+            <button
+              type="button"
+              onClick={handleGetLocation}
+              className="ml-2 p-2 rounded-md bg-teal-500 hover:bg-teal-600 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-slate-800 focus:ring-teal-500 transition-colors duration-150"
+              title="Obtener ubicación actual"
+            >
+              <MapPinIcon className="h-5 w-5" />
+            </button>
+          </div>
         </div>
         <div>
           <label htmlFor="alertTimeStr" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Hora / Fecha del Evento (Ej: "10:30 AM Hoy", "Ayer 3 PM")
           </label>
-          <input
-            id="alertTimeStr"
-            type="text"
-            value={alertTimeStr}
-            onChange={(e) => setAlertTimeStr(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-700 transition-colors duration-150"
-            placeholder="Fecha y hora del suceso"
-          />
+          <div className="flex items-center mt-1">
+            <input
+              id="alertTimeStr"
+              type="text"
+              value={alertTimeStr}
+              onChange={(e) => setAlertTimeStr(e.target.value)}
+              className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-700 transition-colors duration-150"
+              placeholder="Fecha y hora del suceso"
+            />
+            <button
+              type="button"
+              onClick={() => setAlertTimeStr(new Date().toLocaleString())}
+              className="ml-2 p-2 rounded-md bg-teal-500 hover:bg-teal-600 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-slate-800 focus:ring-teal-500 transition-colors duration-150"
+              title="Establecer hora y fecha actual"
+            >
+              <ClockIcon className="h-5 w-5" />
+            </button>
+          </div>
         </div>
         <div>
           <label htmlFor="type" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -148,8 +219,16 @@ const AddAlertForm: React.FC = () => {
             required
             className="mt-1 block w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors duration-150"
           >
-            <option value={AlertType.Current}>Alerta Actual</option>
-            <option value={AlertType.History}>Historial de Alertas</option>
+            <option value="" disabled>Selecciona un tipo de alerta</option>
+            <option value={AlertType.Fire}>Incendio</option>
+            <option value={AlertType.Flood}>Inundación</option>
+            <option value={AlertType.Medical}>Emergencia Médica</option>
+            <option value={AlertType.Crime}>Actividad Delictiva</option>
+            <option value={AlertType.Traffic}>Accidente de Tráfico</option>
+            <option value={AlertType.Weather}>Fenómeno Climático</option>
+            <option value={AlertType.Other}>Otro</option>
+            <option value={AlertType.Current}>Alerta General (Actual)</option>
+            <option value={AlertType.History}>Historial (Interno)</option>
           </select>
         </div>
         {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}

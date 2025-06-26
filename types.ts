@@ -37,6 +37,13 @@ export enum AlertType {
   Critical = 'Critical', // System-level, likely static or admin-controlled
   Current = 'Current',   // User-added or dynamic
   History = 'History',   // User-added or dynamic
+  Fire = 'Fire',
+  Flood = 'Flood',
+  Medical = 'Medical',
+  Crime = 'Crime',
+  Traffic = 'Traffic',
+  Weather = 'Weather',
+  Other = 'Other',
 }
 
 export interface AlertItem {
