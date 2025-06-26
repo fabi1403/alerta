@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertaAhora</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Baloo 2 Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            /* Light Theme Defaults */
+            --bg-primary: #f3f4f6; /* gray-100 */
+            --bg-secondary: #ffffff; /* white */
+            --bg-tertiary: #f9fafb; /* gray-50 */
+            --text-color-base: #1f2937; /* gray-800 */
+            --text-color-muted: #4b5563; /* gray-600 */
+            --border-color: #e5e7eb; /* gray-200 */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --gradient-start: #38bdf8; /* sky-400 */
+            --gradient-end: #0ea5e9;   /* sky-600 */
+            --text-gradient-start: #e0f2fe; /* Light blue, very light for text gradient */
+            --text-gradient-end: #f0f9ff;   /* Even lighter blue, almost white for text gradient */
+            --theme-toggle-bg: #e5e7eb; /* gray-200 */
+            --theme-toggle-hover-bg: #d1d5db; /* gray-300 */
+            --theme-toggle-text: #1f2937; /* gray-800 */
+        }
+
+        html.dark {
+            /* Dark Theme Overrides */
+            --bg-primary: #1a202c; /* dark gray background */
+            --bg-secondary: #2d3748; /* slightly lighter dark for cards */
+            --bg-tertiary: #4a5568; /* even lighter dark for sidebar */
+            --text-color-base: #f7fafc; /* light text */
+            --text-color-muted: #a0aec0; /* muted light text */
+            --border-color: #4a5568; /* dark border */
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --gradient-start: #3b82f6; /* blue-500 */
+            --gradient-end: #2563eb;   /* blue-700 */
+            --text-gradient-start: #bfdbfe; /* Light blue for dark theme text gradient */
+            --text-gradient-end: #93c5fd;   /* Slightly darker blue for dark theme text gradient */
+            --theme-toggle-bg: #4a5568; /* darker shade for dark mode */
+            --theme-toggle-hover-bg: #6b7280; /* even darker for hover */
+            --theme-toggle-text: #f7fafc; /* white text */
+        }
+
+        body {
+            font-family: 'Baloo 2', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-color-base);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-color-muted);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* fixed gray-600 for hover for better contrast */
+        }
+
+        /* General element styling using variables */
+        #authSection {
+            background-color: var(--bg-secondary);
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #dashboardSection {
+            background-color: var(--bg-secondary); /* Dashboard main background */
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        aside {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        main {
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        input, select, textarea {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-color-base);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        input::placeholder, textarea::placeholder {
+            color: var(--text-color-muted);
+        }
+
+        .text-gray-700 { color: var(--text-color-base); }
+        .text-gray-600 { color: var(--text-color-muted); }
+        .text-gray-800 { color: var(--text-color-base); }
+        .text-gray-500 { color: var(--text-color-muted); }
+
+        /* Gradient for main title */
+        .gradient-text {
+            background: linear-gradient(to right, var(--text-gradient-start), var(--text-gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for browsers that don't support background-clip */
+            transition: background 0.3s ease;
+        }
+
+        /* Gradient buttons */
+        .btn-gradient {
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(to left, var(--gradient-start), var(--gradient-end));
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Social login buttons - custom colors for branding, but rounded/shadowed from Tailwind */
+        .btn-social-google { background-color: #db4437; } /* Google Red */
+        .btn-social-google:hover { background-color: #c0392b; transform: scale(1.1); }
+        .btn-social-facebook { background-color: #3b5998; } /* Facebook Blue */
+        .btn-social-facebook:hover { background-color: #2d4373; transform: scale(1.1); }
+        .btn-social-microsoft { background-color: #2f2f2f; } /* Microsoft Dark Gray */
+        .btn-social-microsoft:hover { background-color: #1f1f1f; transform: scale(1.1); }
+        .btn-anonymous { background-color: #6b7280; } /* Gray-700 */
+        .btn-anonymous:hover { background-color: #4b5563; transform: scale(1.05); }
+
+        /* Override specific Tailwind classes that might conflict with custom theming vars */
+        .bg-gray-50 { background-color: var(--bg-tertiary) !important; }
+        .bg-white { background-color: var(--bg-secondary) !important; }
+        .border-gray-200 { border-color: var(--border-color) !important; }
+        .border-gray-300 { border-color: var(--border-color) !important; }
+
+        /* Message box theming */
+        #notificationMessageBox {
+            background-color: var(--bg-primary);
+            border-color: var(--border-color);
+            color: var(--text-color-base);
+        }
+        /* Specific message box colors for success/error/info */
+        .bg-green-100 { background-color: #d1fae5 !important; color: #065f46 !important; border-color: #34d399 !important; }
+        .bg-red-100 { background-color: #fee2e2 !important; color: #991b1b !important; border-color: #ef4444 !important; }
+        .bg-sky-100 { background-color: #e0f2fe !important; color: #0284c7 !important; border-color: #38bdf8 !important; }
+
+        /* Alert Card Specifics */
+        .recent-alert-card {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+        html.dark .recent-alert-card {
+             /* Darker shade for cards in dark mode */
+            background-color: #28303d; /* slightly darker than --bg-secondary */
+        }
+        .recent-alert-card:hover {
+            box-shadow: 0 8px 10px -5px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
+        }
+
+        /* Theme Toggle Button Specifics */
+        #themeToggle {
+            background-color: var(--theme-toggle-bg);
+            color: var(--theme-toggle-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        #themeToggle:hover {
+            background-color: var(--theme-toggle-hover-bg);
+        }
+
+        /* Header Navigation Links */
+        .header-nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header-nav-link.active,
+        .header-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Light background for hover/active in header */
+        }
+
+        /* Sticky Header */
+        header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 40; /* Ensure it stays above other content */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <div id="loadingOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-sky-500"></div>
+        <p class="text-white ml-4 text-lg">Cargando... ⏳</p>
+    </div>
+
+    <header class="bg-gradient-to-r from-sky-500 to-blue-600 text-white p-4 shadow-lg flex items-center justify-between flex-wrap">
+        <div class="flex items-center">
+            <h1 class="text-2xl font-bold gradient-text mr-6">AlertaAhora 🚨</h1>
+        </div>
+        <nav class="flex items-center gap-4 flex-grow justify-end overflow-x-auto">
+            <a href="#recentAlertsSection" class="header-nav-link text-white font-medium text-lg flex-shrink-0">Alertas Recientes ✨</a>
+            <a href="#mapExternalSection" class="header-nav-link text-white font-medium text-lg flex-shrink-0">Ver Mapa 🗺️</a>
+            <button id="themeToggle" class="p-2 rounded-full flex-shrink-0">
+                <i class="fas fa-sun text-xl" id="themeIcon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <div class="flex-grow flex items-start justify-center p-4"> 
+        <div id="authSection" class="p-8 rounded-xl shadow-lg w-full max-w-md transition-all duration-500 ease-in-out">
+            <h2 class="text-3xl font-bold mb-6 text-center gradient-text" id="authTitle">Iniciar Sesión 🔒</h2>
+            <form id="authForm" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm" placeholder="tu@email.com" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                    <input type="password" id="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm" placeholder="********" required>
+                </div>
+                <button type="submit" class="w-full text-white font-semibold py-3 px-4 rounded-lg btn-gradient">
+                    <span id="authButtonText">Iniciar Sesión</span>
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">O inicia sesión con: 👇</p>
+                <div class="flex flex-wrap justify-center gap-4 mt-4">
+                    <button id="googleSignIn" class="flex items-center justify-center w-12 h-12 text-white rounded-full shadow-md transition duration-200 ease-in-out transform hover:scale-110 btn-social-google" title="Iniciar Sesión con Google">
+                        <i class="fab fa-google text-xl"></i>
+                    </button>
+                    <button id="facebookSignIn" class="flex items-center justify-center w-12 h-12 text-white rounded-full shadow-md transition duration-200 ease-in-out transform hover:scale-110 btn-social-facebook" title="Iniciar Sesión con Facebook">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                    </button>
+                    <button id="microsoftSignIn" class="flex items-center justify-center w-12 h-12 text-white rounded-full shadow-md transition duration-200 ease-in-out transform hover:scale-110 btn-social-microsoft" title="Iniciar Sesión con Microsoft">
+                        <i class="fab fa-microsoft text-xl"></i>
+                    </button>
+                    <button id="anonymousSignIn" class="flex items-center justify-center w-auto px-4 py-2 text-white rounded-full shadow-md transition duration-200 ease-in-out transform hover:scale-105 btn-anonymous text-sm" title="Ingresar como Anónimo">
+                        <i class="fas fa-user-secret mr-2"></i> Anónimo
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button id="toggleAuth" class="text-sky-600 hover:text-sky-800 text-sm font-medium">
+                    ¿No tienes cuenta? <span id="toggleAuthText">Regístrate</span>
+                </button>
+            </div>
+
+            <div id="authMessageBox" class="hidden mt-4 p-3 rounded-md text-sm text-center"></div>
+        </div>
+
+        <div id="dashboardSection" class="hidden w-full h-full max-w-6xl rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-500 ease-in-out">
+            <aside class="w-full md:w-1/3 p-6 md:p-8 border-b md:border-r border-gray-200 flex flex-col justify-between">
+                <div>
+                    <h1 class="text-3xl font-extrabold mb-6 flex items-center gradient-text">
+                        <i class="fas fa-bullhorn text-4xl mr-3"></i> AlertaAhora 📣
+                    </h1>
+                    <p class="text-gray-600 text-sm mb-6">Emite una alerta rápida para tu comunidad. Tu ID de usuario: <span id="displayUserId" class="font-bold text-gray-800 break-words"></span></p>
+
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Emitir una Alerta 🚨</h3>
+                    <form id="alertForm" class="space-y-4">
+                        <div>
+                            <label for="alertType" class="block text-sm font-medium text-gray-700">Tipo de Alerta</label>
+                            <select id="alertType" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm" required>
+                                <option value="">Selecciona un tipo</option>
+                                <option value="medica">Médica 🚑</option>
+                                <option value="incendio">Incendio 🔥</option>
+                                <option value="robo">Robo 💰</option>
+                                <option value="desastre_natural">Desastre Natural 🌪️</option>
+                                <option value="otro">Otro ℹ️</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="alertDescription" class="block text-sm font-medium text-gray-700">Descripción Breve</label>
+                            <textarea id="alertDescription" rows="3" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm" placeholder="Ej. Persona herida en la calle principal" required></textarea>
+                        </div>
+                        <div>
+                            <label for="alertLocation" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                            <input type="text" id="alertLocation" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm" placeholder="Ej. Calle Principal #123 (automática por GPS si activado)">
+                            <p class="text-xs text-gray-500 mt-1">Si el GPS está activo, la ubicación se rellenará automáticamente. 📍</p>
+                        </div>
+                        <div>
+                            <label for="requesterName" class="block text-sm font-medium text-gray-700">Nombre del Solicitante (opcional)</label>
+                            <input type="text" id="requesterName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm" placeholder="Ej. Juan Pérez">
+                        </div>
+                        <button type="submit" class="w-full text-white font-semibold py-3 px-4 rounded-lg btn-gradient" style="background: linear-gradient(to right, #10b981, #059669);">
+                            <i class="fas fa-paper-plane mr-2"></i> Enviar Alerta 🚀
+                        </button>
+                    </form>
+                </div>
+                <button id="logoutButton" class="mt-8 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                    Cerrar Sesión 🚪
+                </button>
+            </aside>
+
+            <main class="flex-1 p-6 md:p-8 flex flex-col overflow-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800">Panel Principal 📊</h2>
+                </div>
+
+                <div id="notificationMessageBox" class="hidden px-4 py-3 rounded-md mb-6 transition-all duration-300 ease-in-out opacity-0 translate-y-2">
+                    <p id="notificationMessage" class="font-medium"></p>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-8 flex-grow">
+                    <section id="recentAlertsSection" class="flex-1 mb-8 md:mb-0 flex flex-col">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Alertas Recientes ✨</h3>
+                        <div id="recentAlertsContainer" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            </div>
+                        <div id="noAlertsMessage" class="text-gray-500 text-center mt-4 hidden">No hay alertas activas. 🥳</div>
+                    </section>
+
+                    <section id="mapExternalSection" class="flex-1 flex flex-col items-center justify-center min-h-0 bg-gray-200 rounded-lg shadow-md p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Ver Alertas en Mapa Externo 🗺️</h3>
+                        <p class="text-gray-600 text-center mb-6">Haz clic en el botón para abrir Google Maps y ver las alertas. 👇</p>
+                        <button id="openExternalMapButton" class="flex items-center justify-center px-6 py-3 text-white font-semibold rounded-lg shadow-md btn-gradient" style="background: linear-gradient(to right, #3b82f6, #2563eb);">
+                            <i class="fas fa-map-marked-alt text-2xl mr-3"></i> Abrir Google Maps
+                        </button>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center p-4">
+        <p class="text-sm">© 2023 Derechos reservados a FBN.workspace 🏢</p>
+    </footer>
+
+    <div id="customConfirmModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
+            <p class="text-lg font-semibold text-gray-800 mb-4" id="confirmModalMessage"></p>
+            <div class="flex justify-end space-x-3">
+                <button id="confirmModalCancel" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-200">Cancelar ❌</button>
+                <button id="confirmModalConfirm" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200">Confirmar ✅</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import necessary Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration (provided globally by the Canvas environment)
+        // This setup is crucial for data persistence and user authentication.
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-alerta-ahora-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null; 
+
+        // LocationIQ API Key (Replace with your actual LocationIQ API Access Token)
+        // You can get one from: https://locationiq.com/
+        // ************************************************************************************************
+        // * ¡IMPORTANTE! Reemplaza "Your_API_Access_Token" con tu clave de API REAL de LocationIQ.       *
+        // ************************************************************************************************
+        const LOCATIONIQ_API_KEY = "Your_API_Access_Token"; // <--- !!! REEMPLAZA ESTO CON TU CLAVE DE API REAL DE LOCATIONIQ !!!
+
+        let app, db, auth, userId = null;
+        let isAuthReady = false;
+        let geocoder; // Google Maps Geocoder service (still used for forward geocoding: address to lat/lng)
+        let latestAlertCoordinates = null; // To store coordinates of the latest alert for external map link
+
+        // --- DOM Elements ---
+        const authSection = document.getElementById('authSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const authTitle = document.getElementById('authTitle');
+        const authForm = document.getElementById('authForm');
+        const authButtonText = document.getElementById('authButtonText');
+        const toggleAuth = document.getElementById('toggleAuth');
+        const toggleAuthText = document.getElementById('toggleAuthText');
+        const authMessageBox = document.getElementById('authMessageBox');
+        const alertForm = document.getElementById('alertForm');
+        const alertLocationInput = document.getElementById('alertLocation');
+        const recentAlertsContainer = document.getElementById('recentAlertsContainer');
+        const noAlertsMessage = document.getElementById('noAlertsMessage');
+        const notificationMessageBox = document.getElementById('notificationMessageBox');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const displayUserId = document.getElementById('displayUserId');
+        const logoutButton = document.getElementById('logoutButton');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const openExternalMapButton = document.getElementById('openExternalMapButton');
+        const themeToggle = document.getElementById('themeToggle'); // Theme toggle button (now consolidated in header)
+        const themeIcon = document.getElementById('themeIcon');     // Theme icon
+
+        // Social login buttons
+        const googleSignInButton = document.getElementById('googleSignIn');
+        const facebookSignInButton = document.getElementById('facebookSignIn');
+        const microsoftSignInButton = document.getElementById('microsoftSignIn');
+        const anonymousSignInButton = document.getElementById('anonymousSignIn');
+
+        // Custom Modal elements
+        const customConfirmModal = document.getElementById('customConfirmModal');
+        const confirmModalMessage = document.getElementById('confirmModalMessage');
+        const confirmModalCancel = document.getElementById('confirmModalCancel');
+        const confirmModalConfirm = document.getElementById('confirmModalConfirm');
+
+        let isLoginMode = true; // State to track if it's login or registration mode
+        let confirmResolve = null; // Used by the custom confirmation modal
+
+        // --- Utility Functions ---
+
+        /**
+         * Displays a message in the specified message box.
+         * @param {HTMLElement} messageBox - The DOM element to display the message in.
+         * @param {string} message - The message text.
+         * @param {'success'|'error'|'info'} type - The type of message (influences styling).
+         */
+        function showMessageBox(messageBox, message, type) {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700', 'bg-red-100', 'border-red-400', 'text-red-700', 'bg-blue-100', 'border-blue-400', 'text-blue-700');
+            messageBox.classList.add('block');
+
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+            } else if (type === 'error') {
+                messageBox.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            } else { // info
+                messageBox.classList.add('bg-sky-100', 'border-sky-400', 'text-sky-700');
+            }
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        /**
+         * Displays a temporary notification in the dashboard.
+         * @param {string} message - The notification message.
+         * @param {'success'|'error'|'info'} [type='info'] - The type of notification (influences styling).
+         */
+        function showNotification(message, type = 'info') {
+            notificationMessage.textContent = message;
+            notificationMessageBox.classList.remove('hidden', 'opacity-0', 'translate-y-2', 'bg-sky-100', 'border-sky-400', 'text-sky-700', 'bg-green-100', 'border-green-400', 'text-green-700', 'bg-red-100', 'border-red-400', 'text-red-700');
+            notificationMessageBox.classList.add('block', 'opacity-100', 'translate-y-0');
+
+            if (type === 'success') {
+                notificationMessageBox.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+            } else if (type === 'error') {
+                notificationMessageBox.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+            } else { // info
+                notificationMessageBox.classList.add('bg-sky-100', 'border-sky-400', 'text-sky-700');
+            }
+
+            setTimeout(() => {
+                notificationMessageBox.classList.remove('opacity-100', 'translate-y-0');
+                notificationMessageBox.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    notificationMessageBox.classList.add('hidden');
+                }, 300); // Allow fade out transition to complete
+            }, 5000);
+        }
+
+
+        /**
+         * Gets a descriptive icon based on alert type.
+         * @param {string} type - The type of alert.
+         * @returns {string} - HTML string for the icon.
+         */
+        function getAlertIcon(type) {
+            switch (type) {
+                case 'medica': return '<i class="fas fa-medkit text-red-500"></i>';
+                case 'incendio': return '<i class="fas fa-fire text-orange-500"></i>';
+                case 'robo': return '<i class="fas fa-hand-holding-usd text-purple-500"></i>';
+                case 'desastre_natural': return '<i class="fas fa-cloud-sun-rain text-blue-500"></i>';
+                case 'otro': return '<i class="fas fa-info-circle text-gray-500"></i>';
+                default: return '<i class="fas fa-exclamation-triangle text-yellow-500"></i>';
+            }
+        }
+
+        /**
+         * Shows a custom confirmation modal.
+         * @param {string} message - The message to display.
+         * @returns {Promise<boolean>} - Resolves with true if confirmed, false if cancelled.
+         */
+        function showCustomConfirm(message) {
+            return new Promise((resolve) => {
+                confirmModalMessage.textContent = message;
+                customConfirmModal.classList.remove('hidden');
+                confirmResolve = resolve;
+            });
+        }
+
+        // --- Theme Toggling ---
+        function applyTheme(theme) {
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(theme);
+            localStorage.setItem('theme', theme);
+            
+            // Update theme icon
+            themeIcon.className = ''; // Clear existing classes
+            if (theme === 'dark') {
+                themeIcon.classList.add('fas', 'fa-moon', 'text-white');
+            } else {
+                themeIcon.classList.add('fas', 'fa-sun', 'text-gray-800');
+            }
+        }
+
+        // Event listener for theme toggle
+        if (themeToggle) { // Check if element exists before adding listener
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                applyTheme(newTheme);
+            });
+        }
+
+
+        // --- Firebase Initialization and Auth ---
+
+        /**
+         * Initializes Firebase and sets up authentication listener.
+         */
+        async function initializeFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+                    // Google Maps Geocoder is still needed for forward geocoding (address to lat/lng)
+                    geocoder = new google.maps.Geocoder();
+
+                    // Try to sign in with custom token first, otherwise anonymously
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } else {
+                    console.error("Firebase config not available. Running in demo mode without full persistence.");
+                    auth = {
+                        currentUser: {
+                            uid: crypto.randomUUID(),
+                        },
+                    };
+                    db = {};
+                    console.warn("Firestore operations will be simulated.");
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        displayUserId.textContent = userId;
+                        isAuthReady = true;
+                        console.log("User authenticated:", userId);
+                        showDashboard();
+                        listenForAlerts(); // Start listening for alerts only after auth is ready
+                        getGeolocation(); // Try to get user's current location
+                    } else {
+                        userId = null;
+                        isAuthReady = true; // Auth state determined (no user logged in)
+                        console.log("No user authenticated.");
+                        showAuth();
+                    }
+                    loadingOverlay.classList.add('hidden'); // Hide loading overlay after auth state is determined
+                });
+
+            } catch (error) {
+                console.error("Error initializing Firebase or during authentication:", error);
+                loadingOverlay.classList.add('hidden'); // Hide loading overlay even on error
+                showMessageBox(authMessageBox, "Error al inicializar la aplicación. Inténtalo de nuevo.", 'error');
+                // Fallback to demo mode if Firebase initialization fails
+                auth = {
+                    currentUser: {
+                        uid: crypto.randomUUID(),
+                    },
+                };
+                db = {};
+                userId = auth.currentUser.uid;
+                displayUserId.textContent = userId;
+                isAuthReady = true;
+                showDashboard();
+                console.warn("Firebase initialization failed, running in simulated demo mode.");
+            }
+        }
+
+        // --- View Management ---
+
+        /** Shows the authentication section and hides the dashboard. */
+        function showAuth() {
+            dashboardSection.classList.add('hidden');
+            authSection.classList.remove('hidden');
+        }
+
+        /** Shows the dashboard section and hides the authentication. */
+        function showDashboard() {
+            authSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+        }
+
+        // --- Geolocation and Geocoding ---
+
+        /**
+         * Attempts to get the user's current geolocation and pre-fill the location input.
+         * Uses LocationIQ API for reverse geocoding.
+         */
+        function getGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        // Use LocationIQ for reverse geocoding
+                        try {
+                            const locationIqUrl = `https://us1.locationiq.com/v1/reverse?key=${LOCATIONIQ_API_KEY}&lat=${lat}&lon=${lng}&format=json`;
+                            const response = await fetch(locationIqUrl);
+                            const data = await response.json();
+
+                            if (response.ok && data.display_name) {
+                                alertLocationInput.value = data.display_name;
+                            } else {
+                                console.warn("LocationIQ reverse geocoding failed or returned no display_name:", data);
+                                alertLocationInput.value = `${lat}, ${lng}`; // Fallback to coordinates
+                            }
+                        } catch (apiError) {
+                            console.error("Error fetching from LocationIQ API:", apiError);
+                            alertLocationInput.value = `${lat}, ${lng}`; // Fallback to coordinates on API error
+                        }
+                        console.log("Geolocation successful:", { lat, lng });
+                    },
+                    (error) => {
+                        console.warn("Geolocation failed:", error);
+                        // User denied or other error, leave input for manual entry
+                        alertLocationInput.placeholder = "Ej. Calle Principal #123 (GPS no disponible)";
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            } else {
+                console.warn("Geolocation is not supported by this browser.");
+                alertLocationInput.placeholder = "Ej. Calle Principal #123 (GPS no compatible)";
+            }
+        }
+
+        /**
+         * Geocodes a text location into latitude and longitude.
+         * Still uses Google Maps Geocoder as LocationIQ forward geocoding is a separate endpoint.
+         * @param {string} address - The address string.
+         * @returns {Promise<{lat: number, lng: number}|null>} - Lat/Lng object or null on failure.
+         */
+        async function geocodeAddress(address) {
+            return new Promise((resolve) => {
+                if (!geocoder) {
+                    console.error("Geocoder not initialized.");
+                    return resolve(null);
+                }
+                geocoder.geocode({ 'address': address }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                        resolve({
+                            lat: results[0].geometry.location.lat(),
+                            lng: results[0].geometry.location.lng()
+                        });
+                    } else {
+                        console.error('Google Maps Geocoding failed due to: ' + status);
+                        resolve(null);
+                    }
+                });
+            });
+        }
+
+        // --- Event Listeners ---
+
+        // Toggle between Login and Register forms
+        toggleAuth.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            authTitle.textContent = isLoginMode ? 'Iniciar Sesión 🔒' : 'Registrarse ✍️';
+            authButtonText.textContent = isLoginMode ? 'Iniciar Sesión' : 'Registrarse';
+            toggleAuthText.textContent = isLoginMode ? 'Regístrate' : 'Iniciar Sesión';
+            authForm.reset();
+            authMessageBox.classList.add('hidden');
+        });
+
+        // Handle Custom Confirmation Modal buttons
+        confirmModalConfirm.addEventListener('click', () => {
+            if (confirmResolve) {
+                confirmResolve(true);
+                customConfirmModal.classList.add('hidden');
+                confirmResolve = null;
+            }
+        });
+
+        confirmModalCancel.addEventListener('click', () => {
+            if (confirmResolve) {
+                confirmResolve(false);
+                customConfirmModal.classList.add('hidden');
+                confirmResolve = null;
+            }
+        });
+
+
+        // Handle Email/Password Login/Registration with Firebase Auth
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showMessageBox(authMessageBox, "Por favor, ingresa email y contraseña.", 'error');
+                return;
+            }
+
+            loadingOverlay.classList.remove('hidden');
+
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showMessageBox(authMessageBox, "¡Inicio de sesión exitoso! 🎉", 'success');
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    showMessageBox(authMessageBox, "¡Registro exitoso! Ya puedes iniciar sesión. ✅", 'success');
+                    isLoginMode = true; // Switch back to login mode after registration
+                    authTitle.textContent = 'Iniciar Sesión 🔒';
+                    authButtonText.textContent = 'Iniciar Sesión';
+                    toggleAuthText.textContent = 'Regístrate';
+                }
+                // onAuthStateChanged will handle showing the dashboard and initializing Firebase services
+            } catch (error) {
+                console.error("Firebase Auth error:", error);
+                let errorMessage = "Error de autenticación. Intenta de nuevo. 😞";
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage = "Email o contraseña incorrectos. Si no tienes cuenta, regístrate. 🤔";
+                } else if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = "Este email ya está registrado. Inicia sesión. 📧";
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = "Formato de email inválido. 🚫";
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = "La contraseña debe tener al menos 6 caracteres. 🔑";
+                }
+                showMessageBox(authMessageBox, errorMessage, 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        // Social Login Handlers
+        googleSignInButton.addEventListener('click', async () => {
+            loadingOverlay.classList.remove('hidden');
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                showMessageBox(authMessageBox, "¡Inicio de sesión con Google exitoso! 🚀", 'success');
+            } catch (error) {
+                console.error("Google Sign-In error:", error);
+                let errorMessage = "Error al iniciar sesión con Google. 😥";
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = "Ventana de inicio de sesión de Google cerrada. 🚪";
+                }
+                showMessageBox(authMessageBox, errorMessage, 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        facebookSignInButton.addEventListener('click', async () => {
+            loadingOverlay.classList.remove('hidden');
+            try {
+                const provider = new FacebookAuthProvider();
+                await signInWithPopup(auth, provider);
+                showMessageBox(authMessageBox, "¡Inicio de sesión con Facebook exitoso! 👍", 'success');
+            } catch (error) {
+                console.error("Facebook Sign-In error:", error);
+                let errorMessage = "Error al iniciar sesión con Facebook. 💔";
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = "Ventana de inicio de sesión de Facebook cerrada. 🚪";
+                } else if (error.code === 'auth/account-exists-with-different-credential') {
+                    errorMessage = "Ya existe una cuenta con este email, pero con otro método de inicio de sesión. 🔄";
+                }
+                showMessageBox(authMessageBox, errorMessage, 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        microsoftSignInButton.addEventListener('click', async () => {
+            loadingOverlay.classList.remove('hidden');
+            try {
+                const provider = new OAuthProvider('microsoft.com');
+                await signInWithPopup(auth, provider);
+                showMessageBox(authMessageBox, "¡Inicio de sesión con Microsoft exitoso! 🥳", 'success');
+            } catch (error) {
+                console.error("Microsoft Sign-In error:", error);
+                let errorMessage = "Error al iniciar sesión con Microsoft. 😔";
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = "Ventana de inicio de sesión de Microsoft cerrada. 🚪";
+                } else if (error.code === 'auth/account-exists-with-different-credential') {
+                    errorMessage = "Ya existe una cuenta con este email, pero con otro método de inicio de sesión. 🔄";
+                }
+                showMessageBox(authMessageBox, errorMessage, 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        anonymousSignInButton.addEventListener('click', async () => {
+            loadingOverlay.classList.remove('hidden');
+            try {
+                await signInAnonymously(auth);
+                showMessageBox(authMessageBox, "¡Has ingresado de forma anónima! 👻", 'success');
+            } catch (error) {
+                console.error("Anonymous Sign-In error:", error);
+                showMessageBox(authMessageBox, "Error al iniciar sesión anónimamente. Intenta de nuevo. 😥", 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+
+        // Handle Alert Form Submission
+        alertForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!isAuthReady || !userId) {
+                showMessageBox(authMessageBox, "Debes iniciar sesión para emitir alertas. 🚨", 'error');
+                showAuth();
+                return;
+            }
+
+            const alertType = document.getElementById('alertType').value;
+            const alertDescription = document.getElementById('alertDescription').value;
+            const alertLocationText = document.getElementById('alertLocation').value;
+            const requesterName = document.getElementById('requesterName').value || "Anónimo";
+
+            loadingOverlay.classList.remove('hidden'); // Show loading for alert submission
+
+            let lat = null;
+            let lng = null;
+            let resolvedLocation = alertLocationText;
+
+            // Attempt to get current geolocation first
+            if (navigator.geolocation) {
+                try {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+                    });
+                    lat = position.coords.latitude;
+                    lng = position.coords.longitude;
+                    
+                    // Now use LocationIQ for reverse geocoding
+                    try {
+                        const locationIqUrl = `https://us1.locationiq.com/v1/reverse?key=${LOCATIONIQ_API_KEY}&lat=${lat}&lon=${lng}&format=json`;
+                        const response = await fetch(locationIqUrl);
+                        const data = await response.json();
+
+                        if (response.ok && data.display_name) {
+                            resolvedLocation = data.display_name;
+                        } else {
+                            console.warn("LocationIQ reverse geocoding failed, falling back to coordinates or manual input:", data);
+                            resolvedLocation = `${lat}, ${lng}`; // Fallback if LocationIQ fails
+                        }
+                    } catch (apiError) {
+                        console.error("Error fetching from LocationIQ API during alert submission:", apiError);
+                        resolvedLocation = `${lat}, ${lng}`; // Fallback if LocationIQ fetch fails
+                    }
+
+                } catch (geoError) {
+                    console.warn("Geolocation denied or failed:", geoError);
+                    // Fallback to geocoding manual input if geolocation failed
+                    if (alertLocationText) {
+                        const coords = await geocodeAddress(alertLocationText); // Still using Google Geocoder for forward
+                        if (coords) {
+                            lat = coords.lat;
+                            lng = coords.lng;
+                            resolvedLocation = alertLocationText; // Keep user's input if geocoded successfully
+                        } else {
+                            console.warn("Geocoding manual input failed.");
+                            showMessageBox(notificationMessageBox, "No se pudo determinar la ubicación exacta. Usa una descripción detallada. 📍", 'info');
+                            resolvedLocation = alertLocationText || "Ubicación Desconocida";
+                        }
+                    } else {
+                        resolvedLocation = "Ubicación Desconocida";
+                    }
+                }
+            } else {
+                // If geolocation not supported, try geocoding manual input directly
+                if (alertLocationText) {
+                    const coords = await geocodeAddress(alertLocationText); // Still using Google Geocoder for forward
+                    if (coords) {
+                        lat = coords.lat;
+                        lng = coords.lng;
+                        resolvedLocation = alertLocationText;
+                    } else {
+                        console.warn("Geocoding manual input failed.");
+                        showMessageBox(notificationMessageBox, "No se pudo determinar la ubicación exacta. Usa una descripción detallada. 📍", 'info');
+                        resolvedLocation = alertLocationText || "Ubicación Desconocida";
+                    }
+                } else {
+                    resolvedLocation = "Ubicación Desconocida";
+                }
+            }
+
+            const newAlert = {
+                type: alertType,
+                description: alertDescription,
+                location: resolvedLocation, // Store the resolved location string
+                latitude: lat,
+                longitude: lng,
+                requester: requesterName,
+                timestamp: serverTimestamp ? serverTimestamp() : new Date(),
+                userId: userId,
+            };
+
+            try {
+                if (db && db.app) {
+                    const alertsCollectionRef = collection(db, `artifacts/${appId}/public/data/alerts`);
+                    await addDoc(alertsCollectionRef, newAlert);
+                    showNotification("¡Alerta emitida con éxito! ✨", 'success');
+                } else {
+                    console.warn("Firestore not active. Simulating alert submission.");
+                    addAlertToUI({ ...newAlert, id: Date.now().toString(), timestamp: new Date() });
+                    showNotification("¡Alerta emitida (simulada) con éxito! 🎉");
+                }
+                alertForm.reset();
+                alertLocationInput.value = ''; // Clear location input
+                getGeolocation(); // Try to get new current location for next alert
+            } catch (error) {
+                console.error("Error al emitir la alerta:", error);
+                showNotification("Error al emitir la alerta. Intenta de nuevo. 😟", 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        // Logout Button
+        logoutButton.addEventListener('click', async () => {
+            loadingOverlay.classList.remove('hidden');
+            try {
+                if (auth && auth.signOut) {
+                    await signOut(auth);
+                    console.log("Signed out successfully.");
+                } else {
+                    console.warn("Firebase Auth not active. Simulating logout.");
+                    userId = null;
+                }
+                recentAlertsContainer.innerHTML = ''; // Clear alerts on logout
+                latestAlertCoordinates = null; // Clear latest alert coordinates
+                showAuth();
+                showMessageBox(authMessageBox, "¡Has cerrado sesión! 👋", 'info');
+            } catch (error) {
+                console.error("Error signing out:", error);
+                showMessageBox(authMessageBox, "Error al cerrar sesión. Intenta de nuevo. 😥", 'error');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+            }
+        });
+
+        // Event listener for the new "Open Google Maps" button
+        openExternalMapButton.addEventListener('click', () => {
+            let mapUrl = 'https://www.google.com/maps/'; // Default general map URL
+
+            if (latestAlertCoordinates && latestAlertCoordinates.lat != null && latestAlertCoordinates.lng != null) {
+                // If there's a latest alert with coordinates, use them for the search query
+                mapUrl = `https://www.google.com/maps/search/?api=1&query=${latestAlertCoordinates.lat},${latestAlertCoordinates.lng}`;
+            } else if (navigator.geolocation) {
+                // If no specific alert, try to open map at user's current location if available
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        mapUrl = `https://www.google.com/maps/search/?api=1&query=${position.coords.latitude},${position.coords.longitude}`;
+                        window.open(mapUrl, '_blank');
+                    },
+                    (error) => {
+                        console.warn("Could not get geolocation for external map:", error);
+                        window.open(mapUrl, '_blank'); // Fallback to general map
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+                return; // Exit to prevent opening default URL immediately
+            }
+
+            window.open(mapUrl, '_blank');
+        });
+
+        // --- Alert Rendering and Real-time Updates ---
+
+        /**
+         * Adds an alert card to the UI.
+         * @param {object} alert - The alert object.
+         */
+        function addAlertToUI(alert) {
+            const alertCard = document.createElement('div');
+            alertCard.id = `alert-${alert.id}`; // Add an ID for easy removal/update
+            alertCard.className = `recent-alert-card p-4 rounded-lg shadow-md border border-gray-200 flex items-start space-x-4 transition-all duration-300 ease-in-out transform hover:scale-[1.02]`;
+            const timestampDate = alert.timestamp instanceof Date ? alert.timestamp : (alert.timestamp ? alert.timestamp.toDate() : new Date()); // Convert Firebase Timestamp to Date
+
+            alertCard.innerHTML = `
+                <div class="flex-shrink-0 text-3xl p-2 rounded-full bg-gray-100">${getAlertIcon(alert.type)}</div>
+                <div class="flex-grow">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-semibold uppercase text-sky-600">${alert.type.replace('_', ' ')}</span>
+                        <span class="text-xs text-gray-500">${timestampDate.toLocaleString()}</span>
+                    </div>
+                    <p class="text-lg font-medium text-gray-800">${alert.description}</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        <i class="fas fa-map-marker-alt mr-1"></i> ${alert.location}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Solicitado por: <span class="font-semibold">${alert.requester}</span>
+                    </p>
+                    ${alert.userId === userId ? `
+                        <div class="mt-2 text-right">
+                            <button data-id="${alert.id}" class="delete-alert-btn text-red-500 hover:text-red-700 text-sm font-medium mr-2">
+                                <i class="fas fa-trash-alt"></i> Eliminar
+                            </button>
+                            </div>
+                    ` : ''}
+                </div>
+            `;
+            recentAlertsContainer.prepend(alertCard); // Add new alerts to the top
+
+            // Update latestAlertCoordinates if this is the newest alert
+            if (alert.latitude != null && alert.longitude != null) {
+                latestAlertCoordinates = { lat: alert.latitude, lng: alert.longitude };
+            }
+
+            // Add event listener for delete button
+            const deleteButton = alertCard.querySelector(`.delete-alert-btn[data-id="${alert.id}"]`);
+            if (deleteButton) {
+                deleteButton.addEventListener('click', async () => {
+                    const confirmed = await showCustomConfirm("¿Estás seguro de que quieres eliminar esta alerta? 🗑️");
+                    if (confirmed) {
+                        try {
+                            if (db && db.app) {
+                                await deleteDoc(doc(db, `artifacts/${appId}/public/data/alerts`, alert.id));
+                                showNotification("Alerta eliminada. ✅", 'info');
+                            } else {
+                                console.warn("Firestore not active. Simulating alert deletion.");
+                                alertCard.remove();
+                                updateNoAlertsMessage();
+                                showNotification("Alerta eliminada (simulada). 💨", 'info');
+                            }
+                        } catch (error) {
+                            console.error("Error deleting alert:", error);
+                            showNotification("Error al eliminar la alerta. Intenta de nuevo. 😟", 'error');
+                        }
+                    }
+                });
+            }
+            updateNoAlertsMessage();
+        }
+
+        /** Updates the visibility of the "no alerts" message. */
+        function updateNoAlertsMessage() {
+            if (recentAlertsContainer.children.length === 0) {
+                noAlertsMessage.classList.remove('hidden');
+            } else {
+                noAlertsMessage.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Sets up a real-time listener for alerts from Firestore.
+         * Only runs if Firestore is initialized and user is authenticated.
+         */
+        function listenForAlerts() {
+            if (db && db.app && userId && isAuthReady) {
+                const alertsCollectionRef = collection(db, `artifacts/${appId}/public/data/alerts`);
+                onSnapshot(alertsCollectionRef, (snapshot) => {
+                    // Clear existing alerts before re-rendering to avoid duplicates
+                    recentAlertsContainer.innerHTML = '';
+                    latestAlertCoordinates = null; // Reset for re-population based on newest data
+
+                    const newAlerts = [];
+                    snapshot.docs.forEach(doc => {
+                        newAlerts.push({ id: doc.id, ...doc.data() });
+                    });
+
+                    // Sort alerts by timestamp in descending order (most recent first)
+                    newAlerts.sort((a, b) => {
+                        const tsA = a.timestamp instanceof Date ? a.timestamp.getTime() : (a.timestamp ? a.timestamp.toDate().getTime() : 0);
+                        const tsB = b.timestamp instanceof Date ? b.timestamp.getTime() : (b.timestamp ? b.toDate().getTime() : 0);
+                        return tsB - tsA;
+                    });
+
+                    // Add sorted alerts to UI and update latest coordinates
+                    newAlerts.forEach((alert, index) => {
+                        addAlertToUI(alert);
+                        // The first alert in the sorted list is the latest
+                        if (index === 0 && alert.latitude != null && alert.longitude != null) {
+                            latestAlertCoordinates = { lat: alert.latitude, lng: alert.longitude };
+                        }
+                    });
+
+                    // Handle changes for notifications
+                    snapshot.docChanges().forEach(change => {
+                        const alertData = { id: change.doc.id, ...change.doc.data() };
+                        if (change.type === "added" && !document.getElementById(`alert-${alertData.id}`)) { // Ensure it's a truly new addition not part of initial load
+                            showNotification(`¡Nueva Alerta: ${alertData.description}! 🔔`);
+                        }
+                        if (change.type === "modified") {
+                            showNotification(`Alerta actualizada: ${alertData.description} 🔄`);
+                        }
+                        // if (change.type === "removed") is handled by delete button now
+                    });
+                     updateNoAlertsMessage();
+
+                }, (error) => {
+                    console.error("Error listening to alerts:", error);
+                    // Handle error, e.g., show a message to the user
+                });
+            } else {
+                console.warn("Firestore listener not started. (DB not initialized or user not authenticated)");
+                // In demo mode, simulate some alerts for display
+                if (recentAlertsContainer.children.length === 0) { // Only add if empty
+                    setTimeout(() => {
+                        const demoAlert1 = { id: 'demo1', type: 'medica', description: 'Simulación: Persona con dolor en el parque central', location: 'Parque Central, Ciudad', requester: 'Demo User', timestamp: new Date(Date.now() - 60000), userId: 'demoUser1', latitude: -0.2252, longitude: -78.5249 };
+                        const demoAlert2 = { id: 'demo2', type: 'incendio', description: 'Simulación: Incendio en edificio abandonado', location: 'Calle Vieja 45, Distrito Norte', requester: 'Anon', timestamp: new Date(Date.now() - 120000), userId: 'demoUser2', latitude: -0.1807, longitude: -78.4813 };
+                        
+                        addAlertToUI(demoAlert1);
+                        addAlertToUI(demoAlert2); // Add older alert after newer one in UI for visual order
+                        latestAlertCoordinates = { lat: demoAlert1.latitude, lng: demoAlert1.longitude }; // Set the coordinates of the newest demo alert
+                    }, 2000);
+                }
+            }
+        }
+
+        // --- Initial Load ---
+        window.onload = () => {
+            // Apply saved theme or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            applyTheme(savedTheme);
+
+            loadingOverlay.classList.remove('hidden'); // Show loading overlay on page load
+            initializeFirebase(); // Start Firebase initialization and auth check
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+/* CSS Variables for Theming */
+:root {
+    /* Light Theme Defaults */
+    --bg-primary: #f3f4f6; /* gray-100 */
+    --bg-secondary: #ffffff; /* white */
+    --bg-tertiary: #f9fafb; /* gray-50 */
+    --text-color-base: #1f2937; /* gray-800 */
+    --text-color-muted: #4b5563; /* gray-600 */
+    --border-color: #e5e7eb; /* gray-200 */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --gradient-start: #38bdf8; /* sky-400 */
+    --gradient-end: #0ea5e9;   /* sky-600 */
+    --text-gradient-start: #e0f2fe; /* Light blue, very light for text gradient */
+    --text-gradient-end: #f0f9ff;   /* Even lighter blue, almost white for text gradient */
+    --theme-toggle-bg: #e5e7eb; /* gray-200 */
+    --theme-toggle-hover-bg: #d1d5db; /* gray-300 */
+    --theme-toggle-text: #1f2937; /* gray-800 */
+}
+
+html.dark {
+    /* Dark Theme Overrides */
+    --bg-primary: #1a202c; /* dark gray background */
+    --bg-secondary: #2d3748; /* slightly lighter dark for cards */
+    --bg-tertiary: #4a5568; /* even lighter dark for sidebar */
+    --text-color-base: #f7fafc; /* light text */
+    --text-color-muted: #a0aec0; /* muted light text */
+    --border-color: #4a5568; /* dark border */
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --gradient-start: #3b82f6; /* blue-500 */
+    --gradient-end: #2563eb;   /* blue-700 */
+    --text-gradient-start: #bfdbfe; /* Light blue for dark theme text gradient */
+    --text-gradient-end: #93c5fd;   /* Slightly darker blue for dark theme text gradient */
+    --theme-toggle-bg: #4a5568; /* darker shade for dark mode */
+    --theme-toggle-hover-bg: #6b7280; /* even darker for hover */
+    --theme-toggle-text: #f7fafc; /* white text */
+}
+
+body {
+    font-family: 'Baloo 2', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-color-base);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar for better aesthetics */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--text-color-muted);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #6b7280; /* fixed gray-600 for hover for better contrast */
+}
+
+/* General element styling using variables */
+#authSection {
+    background-color: var(--bg-secondary);
+    box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#dashboardSection {
+    background-color: var(--bg-secondary); /* Dashboard main background */
+    box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+aside {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+main {
+    background-color: var(--bg-secondary);
+    transition: background-color 0.3s ease;
+}
+
+input, select, textarea {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-color-base);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+input::placeholder, textarea::placeholder {
+    color: var(--text-color-muted);
+}
+
+.text-gray-700 { color: var(--text-color-base); }
+.text-gray-600 { color: var(--text-color-muted); }
+.text-gray-800 { color: var(--text-color-base); }
+.text-gray-500 { color: var(--text-color-muted); }
+
+/* Gradient for main title */
+.gradient-text {
+    background: linear-gradient(to right, var(--text-gradient-start), var(--text-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent; /* Fallback for browsers that don't support background-clip */
+    transition: background 0.3s ease;
+}
+
+/* Gradient buttons */
+.btn-gradient {
+    background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.btn-gradient:hover {
+    background: linear-gradient(to left, var(--gradient-start), var(--gradient-end));
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Social login buttons - custom colors for branding, but rounded/shadowed from Tailwind */
+.btn-social-google { background-color: #db4437; } /* Google Red */
+.btn-social-google:hover { background-color: #c0392b; transform: scale(1.1); }
+.btn-social-facebook { background-color: #3b5998; } /* Facebook Blue */
+.btn-social-facebook:hover { background-color: #2d4373; transform: scale(1.1); }
+.btn-social-microsoft { background-color: #2f2f2f; } /* Microsoft Dark Gray */
+.btn-social-microsoft:hover { background-color: #1f1f1f; transform: scale(1.1); }
+.btn-anonymous { background-color: #6b7280; } /* Gray-700 */
+.btn-anonymous:hover { background-color: #4b5563; transform: scale(1.05); }
+
+/* Override specific Tailwind classes that might conflict with custom theming vars */
+.bg-gray-50 { background-color: var(--bg-tertiary) !important; }
+.bg-white { background-color: var(--bg-secondary) !important; }
+.border-gray-200 { border-color: var(--border-color) !important; }
+.border-gray-300 { border-color: var(--border-color) !important; }
+
+/* Message box theming */
+#notificationMessageBox {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+    color: var(--text-color-base);
+}
+/* Specific message box colors for success/error/info */
+.bg-green-100 { background-color: #d1fae5 !important; color: #065f46 !important; border-color: #34d399 !important; }
+.bg-red-100 { background-color: #fee2e2 !important; color: #991b1b !important; border-color: #ef4444 !important; }
+.bg-sky-100 { background-color: #e0f2fe !important; color: #0284c7 !important; border-color: #38bdf8 !important; }
+
+/* Alert Card Specifics */
+.recent-alert-card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+html.dark .recent-alert-card {
+     /* Darker shade for cards in dark mode */
+    background-color: #28303d; /* slightly darker than --bg-secondary */
+}
+.recent-alert-card:hover {
+    box-shadow: 0 8px 10px -5px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
+}
+
+/* Theme Toggle Button Specifics */
+#themeToggle {
+    background-color: var(--theme-toggle-bg);
+    color: var(--theme-toggle-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+#themeToggle:hover {
+    background-color: var(--theme-toggle-hover-bg);
+}
+
+/* Header Navigation Links */
+.header-nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-nav-link.active,
+.header-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light background for hover/active in header */
+}
+
+/* Sticky Header */
+header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 40; /* Ensure it stays above other content */
+}
