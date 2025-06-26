@@ -12,8 +12,8 @@ interface AlertListItemProps {
 }
 
 const AlertListItem: React.FC<AlertListItemProps> = ({ alert, onSoftDelete, currentUserId }) => {
-  const iconToRender = alert.icon_name ? ICON_MAP[alert.icon_name] : <div className="size-6"></div>;
-  const canSoftDelete = alert.user_id && currentUserId && alert.user_id === currentUserId && (alert.type === AlertType.Current || alert.type === 'Current');
+    const iconToRender = ICON_MAP[alert.type] || <div className="size-6"></div>;
+  const canSoftDelete = alert.user_id && currentUserId && alert.user_id === currentUserId;
   
   const [timeLeft, setTimeLeft] = useState<string>('');
 
@@ -159,7 +159,7 @@ const HomePageContent: React.FC = () => {
     setTimeout(() => setActionMessage(null), 4000);
   };
 
-  const currentAlerts = alerts.filter(alert => alert.type === AlertType.Current || alert.type === 'Current');
+  const currentAlerts = alerts.filter(alert => alert.type !== AlertType.History && alert.type !== AlertType.Critical);
   const alertHistory = alerts.filter(alert => alert.type === AlertType.History || alert.type === 'History');
 
   const renderAlerts = (alertsToRender: AlertItem[], type: string) => {

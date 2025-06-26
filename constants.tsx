@@ -126,11 +126,16 @@ export const MoonIcon: React.FC<{ className?: string, size?: string }> = ({ clas
 
 
 export const ICON_MAP: { [key: string]: React.ReactNode } = {
-  WarningCircleIcon: <WarningCircleIcon />,
-  PowerIcon: <PowerIcon />,
-  CarIcon: <CarIcon />,
-  DropIcon: <DropIcon />,
-  TrashIcon: <TrashIcon />, 
+  [AlertType.Critical]: <WarningCircleIcon className="text-red-500" />,
+  [AlertType.Fire]: <BellIcon className="text-orange-500" />,
+  [AlertType.Flood]: <DropIcon className="text-blue-500" />,
+  [AlertType.Medical]: <PlusCircleIcon className="text-red-500" />,
+  [AlertType.Crime]: <WarningCircleIcon className="text-purple-500" />,
+  [AlertType.Traffic]: <CarIcon className="text-gray-500" />,
+  [AlertType.Weather]: <SunIcon className="text-yellow-500" />,
+  [AlertType.Other]: <WarningCircleIcon className="text-gray-500" />,
+  [AlertType.Current]: <WarningCircleIcon className="text-green-500" />,
+  [AlertType.History]: <TrashIcon className="text-slate-500" />,
 };
 
 
